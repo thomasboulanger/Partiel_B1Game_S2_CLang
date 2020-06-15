@@ -10,27 +10,29 @@
 //(et biensur en ctrl+f5 , il ne m affiche aucunes erreurs)
 //
 
-typedef struct _Node {
-    position* position;
-    struct _Node* parent;
-    struct _Node* next;
-    int f, h;
-} node;
-
-typedef struct _List {
-    node* head;
-};
-typedef struct _List* List;
-
 struct _pos
 {
     int x;
     int y;
 };
-typedef struct _pos position;
-position* createposition(int x,int y)
+typedef struct _pos Position;
+
+typedef struct _Node {
+    Position* position;
+    struct _Node* parent;
+    struct _Node* next;
+    int f, h;
+} node;
+
+ struct _List {
+    node* head;
+};
+typedef struct _List* List;
+
+
+Position* createposition(int x,int y)
 {
-    position* pos = calloc(1, sizeof(position));
+    Position* pos = calloc(1, sizeof(Position));
 
     pos->x = x;
     pos->y = y;
@@ -51,6 +53,7 @@ node* last(List list)
 List push(List list, int x,int y)
 {
     node* test = (node*)malloc(sizeof(node));
+
     test->next = NULL;
     test->position = createposition(x,y);
 
@@ -67,12 +70,12 @@ List push(List list, int x,int y)
 
 void freeList(List list)
 {
-    node* delete = (node*)list;
-    while (delete)
+    node* suppr = (node*)list;
+    while (suppr)
     {
-        node* suivant  = delete->next;
-        free(delete);
-        delete = suivant;
+        node* suivant  = suppr->next;
+        free(suppr);
+        suppr = suivant;
     }
 }
 
@@ -82,8 +85,8 @@ void main(int argc, char* argv[])
     int h;
 	int grille[10][10];
     int tableau[15];
-	int departX, departY;
-    int arriveX, arriveY;
+    Position* depart;
+    Position* arrive;
     int distance;
     List open = NULL; 
     List close = NULL;
@@ -98,13 +101,12 @@ void main(int argc, char* argv[])
             for (int j = 0; j < 10; j++)
             {
                 fscanf(grid, "%d", &grille[i][j]);
-                printf(" %d;%d ",i,j); //deconne a lot :v
                 //cree la grille en liste chainée :
                 open = push(open, i,j);
             }
         }
 
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 25; i++)
         {
             fscanf(data, "%d", &tableau[i]);
             //printf("%d", tableau[i]);
@@ -115,10 +117,8 @@ void main(int argc, char* argv[])
         printf("Impossible d'ouvrir un fichier...");
     }
     //TEST 1 
-    departX = tableau[0];
-    departY = tableau[1];
-    arriveX = tableau[2];
-    arriveY = tableau[3];
+    depart = createposition(tableau[0], tableau[1]);
+    arrive = createposition(tableau[2], tableau[3]);
     distance = tableau[4];
     
     //freeList(open);
