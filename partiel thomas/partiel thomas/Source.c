@@ -5,11 +5,16 @@
 #include <math.h>
 
 
+//
+// je peux meme pas le debug car meme si je met un point d arret sur la ligne 1 (ou le main ou quoi que ce soit d autre) j ai une erreur et ca s arrete la :v
+//(et biensur en ctrl+f5 , il ne m affiche aucunes erreurs)
+//
+
 typedef struct _Node {
-    int x, y;
+    position* position;
     struct _Node* parent;
     struct _Node* next;
-    int f, g, h;
+    int f, h;
 } node;
 
 typedef struct _List {
@@ -43,13 +48,11 @@ node* last(List list)
     return last;
 }
 
-List push(List list, int x,int y,int g,int h ,int f)
+List push(List list, int x,int y)
 {
     node* test = (node*)malloc(sizeof(node));
     test->next = NULL;
-    test->x = x;
-    test->y = y;
-    test->g = g;
+    test->position = createposition(x,y);
 
 
     node* last_elt = last(list);
@@ -95,8 +98,9 @@ void main(int argc, char* argv[])
             for (int j = 0; j < 10; j++)
             {
                 fscanf(grid, "%d", &grille[i][j]);
-                printf(" %d;%d ", grille[i],grille[j]);
-                open = push(open, i,j,???,h,depart+h);
+                printf(" %d;%d ",i,j); //deconne a lot :v
+                //cree la grille en liste chainée :
+                open = push(open, i,j);
             }
         }
 
